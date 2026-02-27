@@ -93,7 +93,7 @@
             const riskLevel = (velocity + uniqueness) > 10 ? "轻微" : "极低";
             const consequence = (velocity + uniqueness) > 12 ? "轻微降权（Shadowban 风险）" : "正常（无封禁风险）";
 
-            // 1. 先定义报告的 HTML 结构
+            // 构建完整的报告 HTML
             const reportHTML = `
 <div class="space-y-12">
     <div class="flex items-center justify-between border-b border-zinc-700 pb-6">
@@ -140,46 +140,59 @@
     </div>
 
     <div>
-        <h3 class="uppercase text-xs tracking-widest mb-6 font-semibold">3. 分析维度打分</h3>
+        <h3 class="uppercase text-xs tracking-widest mb-6 font-semibold">3. 分析维度打分（0=安全 / 10=极高危）</h3>
         <div class="grid grid-cols-2 gap-8">
             <div>
-                <div class="flex justify-between text-sm mb-2"><span>发帖密度</span><span class="font-mono text-2xl">${velocity}/10</span></div>
+                <div class="flex justify-between text-sm mb-2"><span>发帖密度 (Velocity)</span><span class="font-mono text-2xl">${velocity}/10</span></div>
                 <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${velocity * 10}%"></div></div>
             </div>
             <div>
-                <div class="flex justify-between text-sm mb-2"><span>内容独特性</span><span class="font-mono text-2xl">${uniqueness}/10</span></div>
+                <div class="flex justify-between text-sm mb-2"><span>内容独特性 (Uniqueness)</span><span class="font-mono text-2xl">${uniqueness}/10</span></div>
                 <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${uniqueness * 10}%"></div></div>
+            </div>
+            <div>
+                <div class="flex justify-between text-sm mb-2"><span>互动质量 (Quality)</span><span class="font-mono text-2xl">${quality}/10</span></div>
+                <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${quality * 10}%"></div></div>
+            </div>
+            <div>
+                <div class="flex justify-between text-sm mb-2"><span>账号信誉系数 (Trust Score)</span><span class="font-mono text-2xl">${trust}/10</span></div>
+                <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${trust * 10}%"></div></div>
             </div>
         </div>
     </div>
 
     <div class="bg-zinc-950 rounded-3xl p-8">
         <h3 class="uppercase text-xs tracking-widest font-semibold mb-5">4. 优化建议</h3>
-        <ul class="space-y-4 text-zinc-300">
-            <li>• 将发帖间隔拉长至 1-2 小时</li>
-            <li>• 增加非商业日常帖（生活、吐槽）</li>
+        <ul class="space-y-6 text-zinc-300">
+            <li class="flex gap-4"><span class="font-mono text-sky-400">01</span> 将发帖间隔拉长至 1-2 小时，模拟真实人类作息</li>
+            <li class="flex gap-4"><span class="font-mono text-sky-400">02</span> 同一推广内容最多出现 2 次，改用不同表述+个人经历</li>
+            <li class="flex gap-4"><span class="font-mono text-sky-400">03</span> 增加非商业日常帖（生活、吐槽），提升账号信任画像</li>
+            <li class="flex gap-4"><span class="font-mono text-sky-400">04</span> 使用 X 内置搜索检查可见度，若下降立即暂停推广 48 小时</li>
         </ul>
     </div>
 
     <div class="text-center pt-8 border-t border-zinc-700">
         <div class="inline-flex items-center gap-4 bg-zinc-950 rounded-2xl px-10 py-5 border border-amber-900">
             <span class="text-amber-400 text-2xl">⚠️</span>
-            <div><div class="text-sm text-amber-400 font-medium">预估后果</div><div class="text-2xl font-semibold">${consequence}</div></div>
+            <div>
+                <div class="text-sm text-amber-400 font-medium">预估后果</div>
+                <div class="text-2xl font-semibold">${consequence}</div>
+            </div>
         </div>
     </div>
-    
-    <div id="share-container"></div>
+
+    <div id="share-area"></div>
 
     <div class="text-center mt-12 text-xs text-zinc-500">
-        本工具由【凯迪创业笔记】提供 • 仅供娱乐与参考
+        本工具由【凯迪创业笔记】提供 • 仅供娱乐与参考 • 建议结合 Grok 真人复核
     </div>
 </div>`;
 
-            // 2. 将 HTML 渲染到页面
+            // 渲染报告
             document.getElementById('report').innerHTML = reportHTML;
             document.getElementById('report').classList.remove('hidden');
 
-            // 3. 渲染完成后，动态插入分享按钮
+            // 动态插入分享按钮
             const tweetText = encodeURIComponent(`我刚刚使用了【凯迪创业笔记】开发的 X 账号合规工具，账号安全度自测非常实用！测测你的：`);
             const tweetUrl = encodeURIComponent(window.location.href);
             const shareBtnHtml = `
@@ -189,7 +202,7 @@
                         <i class="fa-brands fa-x-twitter"></i> 分享检测结果到 X
                     </button>
                 </div>`;
-            document.getElementById('share-container').innerHTML = shareBtnHtml;
+            document.getElementById('share-area').innerHTML = shareBtnHtml;
         }
 
         document.getElementById('username').addEventListener('keypress', function(e) {
