@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X账号合规性审查工具（2026最新政策）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans SC', system-ui, sans-serif; }
+        .report-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .score-bar { height: 8px; background: linear-gradient(to right, #22c55e, #eab308, #ef4444); border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+    <div class="max-w-4xl mx-auto px-6 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-3 bg-zinc-900 rounded-3xl px-6 py-2 mb-6">
+                <span class="text-3xl">🔍</span>
+                <span class="text-2xl font-bold tracking-tight">X 账号合规审查专家</span>
+            </div>
+            <h1 class="text-5xl font-bold mb-3">2026 年风控检测工具</h1>
+            <p class="text-zinc-400 max-w-md mx-auto">输入 X 账号名 → 一键生成完整审查报告（完全按照官方提示词逻辑模拟）</p>
+        </div>
+
+        <!-- Input -->
+        <div class="bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-zinc-800">
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-zinc-400 mb-3">X 用户名（@handle）</label>
+                    <div class="relative">
+                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-500">@</span>
+                        <input id="username" 
+                               type="text" 
+                               placeholder="Starlight1_123" 
+                               class="w-full bg-zinc-800 border border-zinc-700 focus:border-sky-500 rounded-2xl pl-12 pr-6 py-5 text-xl outline-none transition">
+                    </div>
+                </div>
+                
+                <div class="flex items-end">
+                    <button onclick="startAnalysis()" 
+                            class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 px-12 py-5 rounded-2xl font-semibold text-lg flex items-center gap-3 transition shadow-lg">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        开始审查
+                    </button>
+                </div>
+            </div>
+            <p class="text-xs text-zinc-500 mt-4 text-center">工具为前端模拟版（无服务器抓取），报告基于 2026 政策逻辑智能生成</p>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="hidden mt-12 text-center py-20">
+            <div class="inline-flex flex-col items-center">
+                <div class="w-16 h-16 border-4 border-zinc-700 border-t-sky-500 rounded-full animate-spin mb-6"></div>
+                <p class="text-lg font-medium">正在模拟抓取发帖记录、互动数据与算法画像...</p>
+                <p class="text-zinc-500 text-sm mt-2">约需 1.8 秒（真实 AI 速度）</p>
+            </div>
+        </div>
+
+        <!-- Report -->
+        <div id="report" class="hidden report-card mt-12 bg-zinc-900 rounded-3xl p-10 border border-zinc-800">
+            <!-- JS will inject here -->
+        </div>
+    </div>
+
+    <script>
+        function startAnalysis() {
+            let username = document.getElementById('username').value.trim();
+            if (!username) username = "Starlight1_123";
+            if (!username.startsWith('@')) username = '@' + username;
+
+            // Show loading
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('report').classList.add('hidden');
+
+            // Simulate network delay
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                generateReport(username);
+            }, 1650);
+        }
+
+        function generateReport(username) {
+            // Simple randomization based on username length for variety
+            const seed = username.length % 5;
+            const velocity = Math.max(1, Math.min(7, 3 + seed));
+            const uniqueness = Math.max(2, Math.min(8, 5 + (seed - 2)));
+            const quality = Math.max(1, Math.min(5, 2 + seed));
+            const trust = Math.max(1, Math.min(3, 1 + Math.floor(seed / 2)));
+
+            const riskLevel = (velocity + uniqueness) > 10 ? "轻微" : "极低";
+            const consequence = (velocity + uniqueness) > 12 ? "轻微降权（Shadowban 风险）" : "正常（无封禁风险）";
+
+            const reportHTML = `
+<div class="space-y-12">
+    <!-- 标题 -->
+    <div class="flex items-center justify-between border-b border-zinc-700 pb-6">
+        <div>
+            <span class="text-3xl font-bold">${username}</span>
+            <span class="ml-3 text-sm px-4 py-1 bg-emerald-900 text-emerald-400 rounded-full">Premium 账号</span>
+        </div>
+        <div class="text-right">
+            <div class="text-xs text-zinc-500">审查时间</div>
+            <div class="font-mono text-lg">${new Date().toLocaleString('zh-CN')}</div>
+        </div>
+    </div>
+
+    <!-- 1. 合规性结论 -->
+    <div>
+        <h3 class="uppercase text-xs tracking-widest text-emerald-400 font-semibold mb-3">1. 合规性结论</h3>
+        <div class="bg-zinc-950 rounded-2xl p-8 text-lg leading-relaxed border border-emerald-900">
+            整体合规，未检测到明显自动化操作或大规模 Engagement Farming。<br>
+            但存在内容重复和短时集群现象，属于 <span class="font-semibold text-amber-400">${riskLevel}风险</span>。
+        </div>
+    </div>
+
+    <!-- 2. 具体风险项 -->
+    <div>
+        <h3 class="uppercase text-xs tracking-widest text-rose-400 font-semibold mb-4">2. 具体风险项</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-zinc-950 p-6 rounded-2xl border border-rose-900">
+                <div class="flex gap-4">
+                    <i class="fa-solid fa-link text-rose-400 text-2xl mt-1"></i>
+                    <div>
+                        <div class="font-semibold">重复链接/模板推广</div>
+                        <div class="text-sm text-zinc-400 mt-2">feishu 等外部链接多次出现，容易被算法判定为营销刷量</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-zinc-950 p-6 rounded-2xl border border-amber-900">
+                <div class="flex gap-4">
+                    <i class="fa-solid fa-clock text-amber-400 text-2xl mt-1"></i>
+                    <div>
+                        <div class="font-semibold">发帖密度稍高</div>
+                        <div class="text-sm text-zinc-400 mt-2">短时间内（2-4小时）多条回复，接近 Rate Limit 边缘</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 分析维度打分 -->
+    <div>
+        <h3 class="uppercase text-xs tracking-widest mb-6 font-semibold">3. 分析维度打分（0=安全 / 10=极高危）</h3>
+        <div class="grid grid-cols-2 gap-8">
+            <!-- Velocity -->
+            <div>
+                <div class="flex justify-between text-sm mb-2">
+                    <span>发帖密度（Velocity）</span>
+                    <span class="font-mono text-2xl">${velocity}/10</span>
+                </div>
+                <div class="h-3 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${velocity * 10}%"></div>
+                </div>
+            </div>
+            <!-- Uniqueness -->
+            <div>
+                <div class="flex justify-between text-sm mb-2">
+                    <span>内容独特性（Uniqueness）</span>
+                    <span class="font-mono text-2xl">${uniqueness}/10</span>
+                </div>
+                <div class="h-3 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${uniqueness * 10}%"></div>
+                </div>
+            </div>
+            <!-- Quality -->
+            <div>
+                <div class="flex justify-between text-sm mb-2">
+                    <span>互动质量（Quality）</span>
+                    <span class="font-mono text-2xl">${quality}/10</span>
+                </div>
+                <div class="h-3 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${quality * 10}%"></div>
+                </div>
+            </div>
+            <!-- Trust -->
+            <div>
+                <div class="flex justify-between text-sm mb-2">
+                    <span>账号信誉系数（Trust Score）</span>
+                    <span class="font-mono text-2xl">${trust}/10</span>
+                </div>
+                <div class="h-3 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${trust * 10}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 优化建议 -->
+    <div class="bg-zinc-950 rounded-3xl p-8">
+        <h3 class="uppercase text-xs tracking-widest font-semibold mb-5">4. 优化建议</h3>
+        <ul class="space-y-6 text-zinc-300">
+            <li class="flex gap-4"><span class="font-mono text-sky-400">01</span> 将发帖间隔拉长至 1-2 小时，模拟真实人类作息</li>
+            <li class="flex gap-4"><span class="font-mono text-sky-400">02</span> 同一推广内容最多出现 2 次，改用不同表述+个人经历</li>
+            <li class="flex gap-4"><span class="font-mono text-sky-400">03</span> 增加非商业日常帖（生活、吐槽），提升账号信任画像</li>
+            <li class="flex gap-4"><span class="font-mono text-sky-400">04</span> 使用 X 内置搜索检查可见度，若下降立即暂停推广 48 小时</li>
+        </ul>
+    </div>
+
+    <!-- 预估后果 -->
+    <div class="text-center pt-8 border-t border-zinc-700">
+        <div class="inline-flex items-center gap-4 bg-zinc-950 rounded-2xl px-10 py-5 border border-amber-900">
+            <span class="text-amber-400 text-2xl">⚠️</span>
+            <div>
+                <div class="text-sm text-amber-400 font-medium">预估后果</div>
+                <div class="text-2xl font-semibold">${consequence}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-12 text-xs text-zinc-500">
+        本工具仅供娱乐与参考 • 完全基于你提供的提示词逻辑模拟 • 建议结合 Grok 真人复核
+    </div>
+</div>`;
+
+            document.getElementById('report').innerHTML = reportHTML;
+            document.getElementById('report').classList.remove('hidden');
+        }
+
+        // 允许回车直接触发
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') startAnalysis();
+        });
+    </script>
+</body>
+</html>
