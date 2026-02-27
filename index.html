@@ -102,6 +102,18 @@
             const consequence = (velocity + uniqueness) > 12 ? "轻微降权（Shadowban 风险）" : "正常（无封禁风险）";
 
             const reportHTML = `
+            // 在 reportHTML 渲染后添加分享按钮
+const tweetText = encodeURIComponent(`我刚刚使用了【凯迪创业笔记】开发的 X 账号合规工具，账号安全度自测非常实用！测测你的：`);
+const tweetUrl = encodeURIComponent(window.location.href);
+const shareBtnHtml = `
+    <div class="mt-8 pt-8 border-t border-zinc-800 text-center">
+        <button onclick="window.open('https://twitter.com/intent/tweet?text=${tweetText}&url=${tweetUrl}')" 
+                class="bg-white text-black hover:bg-zinc-200 px-8 py-3 rounded-2xl font-bold transition flex items-center gap-2 mx-auto">
+            <i class="fa-brands fa-x-twitter"></i> 分享检测结果到 X
+        </button>
+    </div>
+`;
+document.getElementById('report').insertAdjacentHTML('beforeend', shareBtnHtml);
 <div class="space-y-12">
     <!-- 标题 -->
     <div class="flex items-center justify-between border-b border-zinc-700 pb-6">
@@ -236,3 +248,4 @@
 </body>
 
 </html>
+
