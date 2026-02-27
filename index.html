@@ -2,14 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="由公众号：凯迪创业笔记提供的 2026 最新 X (Twitter) 账号合规性审查工具。基于官方风控逻辑模拟，检测账号降权风险、发帖密度及内容独特性。">
-    <meta name="keywords" content="X合规审查, Twitter风控检测, 账号降权, 凯迪创业笔记, 社交媒体运营工具, GEO策略">
-    <meta name="author" content="凯迪创业笔记">
+<meta name="description" content="由凯迪创业笔记提供的 2026 最新 X (Twitter) 账号合规性审查工具。基于官方风控逻辑模拟，检测账号降权风险、发帖密度及内容独特性。">
+<meta name="keywords" content="X合规审查, Twitter风控检测, 账号降权, 凯迪创业笔记, 社交媒体运营工具, GEO策略">
+<meta name="author" content="凯迪创业笔记">
 
-    <meta property="og:title" content="X 账号合规性审查专家 - 2026 年风控检测工具">
-    <meta property="og:description" content="输入 X 账号名，一键生成完整审查报告。由凯迪创业笔记出品。">
-    <meta property="og:url" content="https://kaidi0980.github.io/x-checker/">
-    <meta property="og:type" content="website">
+<meta property="og:title" content="X 账号合规性审查专家 - 2026 年风控检测工具">
+<meta property="og:description" content="输入 X 账号名，一键生成完整审查报告。由凯迪创业笔记出品。">
+<meta property="og:url" content="https://kaidi0980.github.io/x-checker/">
+<meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X账号合规性审查工具（2026最新政策）</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -93,7 +93,7 @@
             const riskLevel = (velocity + uniqueness) > 10 ? "轻微" : "极低";
             const consequence = (velocity + uniqueness) > 12 ? "轻微降权（Shadowban 风险）" : "正常（无封禁风险）";
 
-            // 构建完整的报告 HTML
+            // 1. 构建 HTML 内容
             const reportHTML = `
 <div class="space-y-12">
     <div class="flex items-center justify-between border-b border-zinc-700 pb-6">
@@ -143,19 +143,19 @@
         <h3 class="uppercase text-xs tracking-widest mb-6 font-semibold">3. 分析维度打分（0=安全 / 10=极高危）</h3>
         <div class="grid grid-cols-2 gap-8">
             <div>
-                <div class="flex justify-between text-sm mb-2"><span>发帖密度 (Velocity)</span><span class="font-mono text-2xl">${velocity}/10</span></div>
+                <div class="flex justify-between text-sm mb-2"><span>发帖密度（Velocity）</span><span class="font-mono text-2xl">${velocity}/10</span></div>
                 <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${velocity * 10}%"></div></div>
             </div>
             <div>
-                <div class="flex justify-between text-sm mb-2"><span>内容独特性 (Uniqueness)</span><span class="font-mono text-2xl">${uniqueness}/10</span></div>
+                <div class="flex justify-between text-sm mb-2"><span>内容独特性（Uniqueness）</span><span class="font-mono text-2xl">${uniqueness}/10</span></div>
                 <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${uniqueness * 10}%"></div></div>
             </div>
             <div>
-                <div class="flex justify-between text-sm mb-2"><span>互动质量 (Quality)</span><span class="font-mono text-2xl">${quality}/10</span></div>
+                <div class="flex justify-between text-sm mb-2"><span>互动质量（Quality）</span><span class="font-mono text-2xl">${quality}/10</span></div>
                 <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${quality * 10}%"></div></div>
             </div>
             <div>
-                <div class="flex justify-between text-sm mb-2"><span>账号信誉系数 (Trust Score)</span><span class="font-mono text-2xl">${trust}/10</span></div>
+                <div class="flex justify-between text-sm mb-2"><span>账号信誉系数（Trust Score）</span><span class="font-mono text-2xl">${trust}/10</span></div>
                 <div class="h-3 bg-zinc-800 rounded-full overflow-hidden"><div class="h-3 bg-gradient-to-r from-emerald-400 to-yellow-400" style="width: ${trust * 10}%"></div></div>
             </div>
         </div>
@@ -181,28 +181,27 @@
         </div>
     </div>
 
-    <div id="share-area"></div>
+    <div id="share-container"></div>
 
     <div class="text-center mt-12 text-xs text-zinc-500">
-        本工具由【凯迪创业笔记】提供 • 仅供娱乐与参考 • 建议结合 Grok 真人复核
+        本工具仅供娱乐与参考 • 完全基于你提供的提示词逻辑模拟 • 建议结合 Grok 真人复核
     </div>
 </div>`;
 
-            // 渲染报告
+            // 渲染
             document.getElementById('report').innerHTML = reportHTML;
             document.getElementById('report').classList.remove('hidden');
 
-            // 动态插入分享按钮
+            // 插入按钮
             const tweetText = encodeURIComponent(`我刚刚使用了【凯迪创业笔记】开发的 X 账号合规工具，账号安全度自测非常实用！测测你的：`);
             const tweetUrl = encodeURIComponent(window.location.href);
-            const shareBtnHtml = `
+            document.getElementById('share-container').innerHTML = `
                 <div class="mt-8 pt-8 border-t border-zinc-800 text-center">
                     <button onclick="window.open('https://twitter.com/intent/tweet?text=${tweetText}&url=${tweetUrl}')" 
                             class="bg-white text-black hover:bg-zinc-200 px-8 py-3 rounded-2xl font-bold transition flex items-center gap-2 mx-auto shadow-xl">
                         <i class="fa-brands fa-x-twitter"></i> 分享检测结果到 X
                     </button>
                 </div>`;
-            document.getElementById('share-area').innerHTML = shareBtnHtml;
         }
 
         document.getElementById('username').addEventListener('keypress', function(e) {
